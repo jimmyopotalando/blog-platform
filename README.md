@@ -17,7 +17,7 @@ It supports user authentication, role-based access (authors vs readers), post cr
 ---
 ---
 ## 📂 Project Structure
----
+```text
 blog-platform/
 ├── client/          # React frontend
 │   ├── src/         # Components, pages, routes, services, utils
@@ -32,7 +32,7 @@ blog-platform/
 ├── .gitignore
 ├── README.md
 └── package.json
----
+```
 Code
 
 ---
