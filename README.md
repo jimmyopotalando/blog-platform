@@ -15,7 +15,7 @@ It supports user authentication, role-based access (authors vs readers), post cr
 - RESTful API with Express + Mongoose
 
 ---
-
+---
 ## 📂 Project Structure
 blog-platform/
 ├── client/          # React frontend
@@ -31,7 +31,7 @@ blog-platform/
 ├── .gitignore
 ├── README.md
 └── package.json
-
+---
 Code
 
 ---
