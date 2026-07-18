@@ -17,6 +17,7 @@ It supports user authentication, role-based access (authors vs readers), post cr
 ---
 ---
 ## 📂 Project Structure
+---
 blog-platform/
 ├── client/          # React frontend
 │   ├── src/         # Components, pages, routes, services, utils
