@@ -13,23 +13,29 @@ function Login() {
     setError("");
     setLoading(true);
 
+    // Basic client-side validation
     if (!email || !password) {
       setError("Email and password are required");
       setLoading(false);
       return;
     }
 
-    const success = await login(email, password);
-    if (!success) {
-      setError("Invalid credentials. Please try again.");
+    // Call login function from AuthContext
+    const errorMsg = await login(email, password);
+    if (errorMsg) {
+      setError(errorMsg); // Show backend error message
     }
+
     setLoading(false);
   };
 
   return (
     <div className="max-w-md mx-auto mt-10 bg-white shadow-md rounded p-6">
       <h2 className="text-2xl font-bold mb-4">Login</h2>
+
+      {/* Error message */}
       {error && <p className="text-red-500 mb-3">{error}</p>}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="email"
@@ -38,6 +44,7 @@ function Login() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+
         <input
           type="password"
           placeholder="Password"
@@ -45,6 +52,7 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
         <button
           type="submit"
           disabled={loading}

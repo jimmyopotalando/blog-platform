@@ -14,6 +14,7 @@ function Register() {
     setError("");
     setLoading(true);
 
+    // Basic client-side validation
     if (!name || !email || !password) {
       setError("All fields are required");
       setLoading(false);
@@ -26,17 +27,22 @@ function Register() {
       return;
     }
 
-    const success = await register(name, email, password);
-    if (!success) {
-      setError("Registration failed. Try again.");
+    // Call register function from AuthContext
+    const errorMsg = await register(name, email, password);
+    if (errorMsg) {
+      setError(errorMsg); // Show backend error message
     }
+
     setLoading(false);
   };
 
   return (
     <div className="max-w-md mx-auto mt-10 bg-white shadow-md rounded p-6">
       <h2 className="text-2xl font-bold mb-4">Register</h2>
+
+      {/* Error message */}
       {error && <p className="text-red-500 mb-3">{error}</p>}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
@@ -45,6 +51,7 @@ function Register() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
+
         <input
           type="email"
           placeholder="Email"
@@ -52,6 +59,7 @@ function Register() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+
         <input
           type="password"
           placeholder="Password"
@@ -59,6 +67,7 @@ function Register() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
         <button
           type="submit"
           disabled={loading}

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// Create Axios instance
+// Create Axios instance with base URL from environment or fallback
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
   headers: {
@@ -8,7 +8,7 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to attach JWT
+// Request interceptor → attach JWT token if available
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -17,18 +17,38 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    console.error("Request error:", error);
+    return Promise.reject(error);
+  }
 );
 
-// Response interceptor for error handling
+// Response interceptor → handle errors globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Token expired or unauthorized → clear local storage
+    const status = error.response?.status;
+
+    // Handle unauthorized / expired token
+    if (status === 401) {
+      console.warn("Unauthorized or expired token. Logging out...");
       localStorage.removeItem("token");
-      window.location.href = "/login";
+      // Redirect to login page (SPA-friendly if using React Router)
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
     }
+
+    // Log other errors for debugging
+    if (status) {
+      console.error(
+        `API Error [${status}]:`,
+        error.response?.data?.message || error.message
+      );
+    } else {
+      console.error("Network/Unknown API error:", error.message);
+    }
+
     return Promise.reject(error);
   }
 );

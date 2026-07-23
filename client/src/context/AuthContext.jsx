@@ -40,32 +40,38 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   // Login function
-  const login = async (email, password) => {
-    try {
-      const { data } = await axios.post("/auth/login", { email, password });
-      setToken(data.token);
-      localStorage.setItem("token", data.token);
-      setUser(data.user);
-      return true;
-    } catch (err) {
-      console.error("Login failed:", err);
-      return false;
-    }
-  };
+const login = async (email, password) => {
+  try {
+    const { data } = await axios.post("/auth/login", { email, password });
+    setToken(data.token);
+    localStorage.setItem("token", data.token);
+    setUser(data.user);
+    return null; // success → no error
+  } catch (err) {
+    // Capture backend error message
+    const errorMsg = err.response?.data?.message || "Invalid credentials. Please try again.";
+    console.error("Login failed:", errorMsg);
+    return errorMsg; // return the backend message
+  }
+};
+
 
   // Register function
-  const register = async (name, email, password) => {
-    try {
-      const { data } = await axios.post("/auth/register", { name, email, password });
-      setToken(data.token);
-      localStorage.setItem("token", data.token);
-      setUser(data.user);
-      return true;
-    } catch (err) {
-      console.error("Registration failed:", err);
-      return false;
-    }
-  };
+const register = async (name, email, password) => {
+  try {
+    const { data } = await axios.post("/auth/register", { name, email, password });
+    setToken(data.token);
+    localStorage.setItem("token", data.token);
+    setUser(data.user);
+    return null; // no error
+  } catch (err) {
+    // Capture backend error message
+    const errorMsg = err.response?.data?.message || "Registration failed. Try again.";
+    console.error("Registration failed:", errorMsg);
+    return errorMsg;
+  }
+};
+
 
   // Logout function
   const logout = () => {
